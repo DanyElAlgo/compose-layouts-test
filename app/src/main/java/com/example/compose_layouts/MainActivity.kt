@@ -143,9 +143,9 @@ fun GreetingPreview() {
     Compose_LayoutsTheme {
         Column{
 //            MDExample("Android", onClick = {})
-//            ImageExample()
+            ImageExample()
 //            StaticVerticalList()
-            DynamicLazyColumn()
+//            DynamicLazyColumn()
         }
     }
 }
