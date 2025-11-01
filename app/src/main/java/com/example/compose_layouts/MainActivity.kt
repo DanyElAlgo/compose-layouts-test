@@ -120,7 +120,7 @@ fun StaticVerticalList() {
 }
 @Composable
 fun DynamicLazyColumn() {
-    val itemsList = listOf("Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape")
+    val itemsList = listOf("Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape")
     LazyColumn {
         items(itemsList){ item ->
             Text(text = item)
@@ -142,10 +142,10 @@ fun ImageExample(){
 fun GreetingPreview() {
     Compose_LayoutsTheme {
         Column{
-            MDExample("Android", onClick = {})
+//            MDExample("Android", onClick = {})
 //            ImageExample()
 //            StaticVerticalList()
-//            DynamicLazyColumn()
+            DynamicLazyColumn()
         }
     }
 }
