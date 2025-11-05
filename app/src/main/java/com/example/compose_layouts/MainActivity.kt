@@ -5,40 +5,33 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.compose_layouts.ui.theme.Compose_LayoutsTheme
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,10 +42,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     MDExample(
                         name = "Android",
-                        modifier = Modifier.padding(innerPadding),
-                        onClick = {
-                            // Handle FAB click
-                        }
+                        modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
@@ -61,80 +51,70 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MDExample(name: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
-    Column{
-        var selectedIndex by remember { mutableIntStateOf(0) }
-        val options = listOf("Day", "Month", "Week")
+fun MDExample(name: String, modifier: Modifier = Modifier) {
+    Text(
+        text = "Hello $name!",
+        modifier = modifier.padding(16.dp)
+    )
+}
 
-        SingleChoiceSegmentedButtonRow {
-            options.forEachIndexed { index, label ->
-                SegmentedButton(
-                    shape = SegmentedButtonDefaults.itemShape(
-                        index = index,
-                        count = options.size
-                    ),
-                    onClick = { selectedIndex = index },
-                    selected = index == selectedIndex,
-                    label = { Text(label) }
-                )
-            }
-        }
-        var expanded by remember { mutableStateOf(false) }
+val RoundedShape = RoundedCornerShape(12.dp)
+
+@Composable
+fun ImageExample(
+    modifier: Modifier = Modifier,
+    sizeDp: Int = 200,
+    borderWidthDp: Int = 4
+) {
+    val shape = RoundedCornerShape(12.dp)
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .aspectRatio(1f)
+            .shadow(elevation = 6.dp, shape = RoundedShape),
+        contentAlignment = Alignment.Center
+    ) {
         Box(
             modifier = Modifier
-                .padding(16.dp)
+                .size(sizeDp.dp)
+                .clip(shape)
         ) {
-            IconButton(onClick = { expanded = !expanded }) {
-                Icon(Icons.Default.MoreVert, contentDescription = "More options")
-            }
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
+            Image(
+                painter = painterResource(id = R.drawable.pvz_logo),
+                contentDescription = "Imagen",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.matchParentSize()
+            )
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .border(borderWidthDp.dp, Color.Black, shape)
+            )
+        }
+    }
+}
+
+@Composable
+fun GridExample(){
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        modifier = Modifier.padding(8.dp)
+    ) {
+        items(20) { index ->
+            Box(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .height(150.dp)
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
             ) {
-                DropdownMenuItem(
-                    text = { Text("Option 1") },
-                    onClick = { /* Do something... */ }
-                )
-                DropdownMenuItem(
-                    text = { Text("Option 2") },
-                    onClick = { /* Do something... */ }
-                )
+                Column{
+                    ImageExample()
+                    Text(text = "Grid Item $index", modifier = Modifier.padding(vertical = 10.dp).fillMaxWidth(), fontSize = 18.dp.value.sp, textAlign = TextAlign.Center)
+                }
             }
         }
-        FloatingActionButton(
-            onClick = { onClick() },
-        ) {
-            Icon(Icons.Filled.Add, "Floating action button.")
-        }
     }
-}
-
-@Composable
-fun StaticVerticalList() {
-    val scrollState = rememberScrollState()
-    Column(modifier = Modifier.verticalScroll(scrollState)) {
-        repeat(50) { index ->
-            Text(text = "Item $index")
-        }
-    }
-}
-@Composable
-fun DynamicLazyColumn() {
-    val itemsList = listOf("Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape")
-    LazyColumn {
-        items(itemsList){ item ->
-            Text(text = item)
-        }
-    }
-}
-
-@Composable
-fun ImageExample(){
-    Image(
-        painter = painterResource(id = R.drawable.pvz_logo),
-        contentDescription = "Sample Image",
-        modifier = Modifier.width(270.dp).height(150.dp).padding(top = 2.dp)
-    )
 }
 
 @Preview(showBackground = true)
@@ -142,10 +122,7 @@ fun ImageExample(){
 fun GreetingPreview() {
     Compose_LayoutsTheme {
         Column{
-//            MDExample("Android", onClick = {})
-            ImageExample()
-//            StaticVerticalList()
-//            DynamicLazyColumn()
+            GridExample()
         }
     }
 }
